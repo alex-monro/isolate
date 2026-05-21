@@ -7,7 +7,11 @@ export default function Home() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-12 pt-24 ">
+    <div
+      className="flex flex-col items-center justify-center gap-12 pt-24 "
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => e.preventDefault()}
+    >
       <h1 className="font-black italic text-5xl tracking-tightest">
         Stem Splitter
       </h1>
