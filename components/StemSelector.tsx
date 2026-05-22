@@ -1,9 +1,15 @@
 import AudioPlayer from "@/components/AudioPlayer";
 import { useState } from "react";
+import { Mic2, Drum, Speaker, Music } from "lucide-react";
 
 const StemSelector = ({ audioFile }: { audioFile: File }) => {
   const [selectedStems, setSelectedStems] = useState<string[]>([]);
-  const stems = ["Vocals", "Drums", "Bass", "Melody"];
+  const stems = [
+    { name: "Vocals", icon: Mic2 },
+    { name: "Drums", icon: Drum },
+    { name: "Bass", icon: Speaker },
+    { name: "Melody", icon: Music },
+  ];
 
   // if selected stem is included in the stem array, filter the array to remove it and update it.
   const handleStemSelection = (stem: string) => {
@@ -32,17 +38,28 @@ const StemSelector = ({ audioFile }: { audioFile: File }) => {
           Choose which stems you want. Each selection will be processed and
           available for download.
         </p>
-        <div className="">
+        <div>
           {stems.map((stem) => (
             <button
-              key={stem}
-              className={`px-16 py-4 text-xl border border-black m-2 rounded-2xl border-2 font-medium tacking-tight ${selectedStems.includes(stem) ? "bg-black text-white" : "bg-white text-black"}`}
+              key={stem.name}
+              className={`px-16 py-4 text-xl border border-black m-2 rounded-2xl border-2 transition-all duration-200  font-medium  ${selectedStems.includes(stem.name) ? " bg-black text-white ring-4 ring-black ring-offset-2" : "bg-white text-black"}`}
               //Run this function on click
-              onClick={() => handleStemSelection(stem)}
+              onClick={() => handleStemSelection(stem.name)}
             >
-              {stem}
+              <span className="flex items-center justify-center">
+                {stem.name} <stem.icon className="w-5 h-5 inline ml-2" />
+              </span>
             </button>
           ))}
+        </div>
+        <div>
+          <button
+            className={`px-24 w-85 flex-shrink-0  py-4 text-xl m-2 rounded-2xl  transition-all duration-200  font-medium tacking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-gray-200  text-gray-600"}`}
+          >
+            {selectedStems.length > 0
+              ? `Process ${selectedStems.length} Stem${selectedStems.length > 1 ? "s" : ""}`
+              : "Select Stems"}
+          </button>
         </div>
       </div>
     </div>
