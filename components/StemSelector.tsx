@@ -1,9 +1,19 @@
 import AudioPlayer from "@/components/AudioPlayer";
-import { useState } from "react";
+import { useState, SetStateAction, Dispatch } from "react";
 import { Mic2, Drum, Speaker, Music } from "lucide-react";
 
-const StemSelector = ({ audioFile }: { audioFile: File }) => {
-  const [selectedStems, setSelectedStems] = useState<string[]>([]);
+const StemSelector = ({
+  audioFile,
+  selectedStems,
+  setSelectedStems,
+  setIsProcessing,
+}: {
+  audioFile: File;
+  selectedStems: string[];
+  // Typed as Dispatch<SetStateAction> to explicitly tell TypeScript we're passing down a setter — which can accept both a direct value and a callback function
+  setSelectedStems: Dispatch<SetStateAction<string[]>>;
+  setIsProcessing: (isProcessing: boolean) => void;
+}) => {
   const stems = [
     { name: "Vocals", icon: Mic2 },
     { name: "Drums", icon: Drum },
@@ -19,6 +29,22 @@ const StemSelector = ({ audioFile }: { audioFile: File }) => {
     } else {
       setSelectedStems((prev) => [...prev, stem]);
     }
+  };
+
+  const splitStems = async () => {
+    setIsProcessing(true);
+    const formData = new FormData();
+    formData.append("audio", audioFile);
+
+    const response = await fetch("/api/process", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+    setIsProcessing(false);
   };
 
   return (
@@ -55,6 +81,8 @@ const StemSelector = ({ audioFile }: { audioFile: File }) => {
         <div>
           <button
             className={`px-24 w-85 flex-shrink-0  py-4 text-xl m-2 rounded-2xl  transition-all duration-200  font-medium tacking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-gray-200  text-gray-600"}`}
+            disabled={selectedStems.length === 0}
+            onClick={splitStems}
           >
             {selectedStems.length > 0
               ? `Process ${selectedStems.length} Stem${selectedStems.length > 1 ? "s" : ""}`

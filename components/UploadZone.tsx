@@ -19,7 +19,7 @@ const UploadZone = ({
   return (
     // This is the upload zone. I used a ref to make sure that when the user clicks on the div, it actually triggers the input properties
     <>
-      <div className="flex flex-col items-center justify-center gap-12 mt-12">
+      <div className="flex flex-col items-center justify-center gap-12 ">
         <h1 className="font-black italic text-5xl tracking-tightest">
           Stem Splitter
         </h1>
