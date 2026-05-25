@@ -21,8 +21,26 @@ body {
   animation: loader 1.5s ease-in-out infinite;
 }
 
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.5s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loading {
+    animation: none;
+  }
+  .fade-up {
     animation: none;
   }
 }

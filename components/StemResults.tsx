@@ -2,7 +2,7 @@
 
 import React from "react";
 import AudioPlayer from "./AudioPlayer";
-import { Mic2, Drum, Speaker, Music, Download } from "lucide-react";
+import { Mic2, Drum, Speaker, Music, Download, ArrowLeft } from "lucide-react";
 
 const stemIcons: Record<string, React.ElementType> = {
   vocals: Mic2,
@@ -27,23 +27,38 @@ const stemNotes: Record<string, string> = {
 const StemResults = ({
   stemResults,
   fileName,
+  reset,
 }: {
   stemResults: Record<string, string | null>;
   fileName: string;
+  reset: () => void;
 }) => {
-  const handleDownload = async (url: string, stem: string) => {
+  const downloadStem = async (url: string, stem: string) => {
     const response = await fetch(url);
     const blob = await response.blob();
-    const stemURl = URL.createObjectURL(blob);
+    const objectUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = stemURl;
+    link.href = objectUrl;
     link.download = `${stem.toLowerCase()}_${fileName.toLowerCase()}.wav`;
     link.click();
-    URL.revokeObjectURL(stemURl);
+    URL.revokeObjectURL(objectUrl);
+  };
+
+  const handleDownloadAll = () => {
+    Object.entries(stemResults).forEach(([stem, url]) => {
+      if (url) downloadStem(url, stem);
+    });
   };
   return (
-    <div className="w-full flex flex-col items-center gap-12">
-      <h2 className="font-bold text-3xl tracking-tightest">Your Stems</h2>
+    <div className="w-full flex flex-col items-center gap-12 fade-up">
+      <button
+        onClick={reset}
+        className="absolute -top-12 left-0 flex items-center gap-1 text-base font-medium text-gray-700 hover:text-black transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Pick a different file
+      </button>
+      <h2 className="font-bold text-5xl tracking-tightest">Your Stems</h2>
       <div className="w-full max-w-6xl grid grid-cols-2 gap-6">
         {Object.entries(stemResults).map(([stem, url]) => {
           const key = stem.toLowerCase();
@@ -55,7 +70,7 @@ const StemResults = ({
               className="border-2 border-black rounded-2xl p-5 flex flex-col gap-4"
             >
               <div className="flex items-center gap-2">
-                <Icon className="w-5 h-5 flex-shrink-0" />
+                <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
                 <div>
                   <p className="font-bold text-lg leading-tight capitalize">
                     {stem}
@@ -70,10 +85,11 @@ const StemResults = ({
               )}
               {url && (
                 <button
-                  onClick={() => handleDownload(url, stem)}
+                  onClick={() => downloadStem(url, stem)}
+                  aria-label={`Download ${stem}`}
                   className="flex items-center justify-center gap-2 w-full py-2 bg-black text-white rounded-xl font-medium text-base"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4" aria-hidden="true" />
                   Download
                 </button>
               )}
@@ -81,6 +97,13 @@ const StemResults = ({
           );
         })}
       </div>
+      <button
+        onClick={handleDownloadAll}
+        className="flex items-center gap-2 px-10 py-4 bg-black text-white rounded-2xl font-bold text-lg"
+      >
+        <Download className="w-5 h-5" />
+        Download All Stems
+      </button>
     </div>
   );
 };

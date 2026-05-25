@@ -2,7 +2,7 @@
 
 import AudioPlayer from "@/components/AudioPlayer";
 import { useState, useMemo, SetStateAction, Dispatch } from "react";
-import { Mic2, Drum, Speaker, Music } from "lucide-react";
+import { Mic2, Drum, Speaker, Music, ArrowLeft } from "lucide-react";
 
 const StemSelector = ({
   audioFile,
@@ -10,6 +10,7 @@ const StemSelector = ({
   setSelectedStems,
   setIsProcessing,
   setStemResults,
+  reset,
 }: {
   audioFile: File;
   selectedStems: string[];
@@ -17,6 +18,7 @@ const StemSelector = ({
   setSelectedStems: Dispatch<SetStateAction<string[]>>;
   setIsProcessing: (isProcessing: boolean) => void;
   setStemResults: (stemResults: Record<string, string | null>) => void;
+  reset: () => void;
 }) => {
   const audioUrl = useMemo(() => URL.createObjectURL(audioFile), [audioFile]);
 
@@ -55,7 +57,14 @@ const StemSelector = ({
   };
 
   return (
-    <div className="w-full min-h-full flex flex-col items-center justify-center gap-12">
+    <>
+      <button
+        onClick={reset}
+        className="absolute top-0 left-0 flex items-center gap-1 text-base font-medium text-gray-700 hover:text-black transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Pick a different file
+      </button>
       <h1 className="font-black text-5xl tracking-tightest">Stem Splitter</h1>
 
       <div className="w-full max-w-6xl">
@@ -76,8 +85,8 @@ const StemSelector = ({
         {stems.map((stem) => (
           <button
             key={stem.name}
+            aria-pressed={selectedStems.includes(stem.name)}
             className={`px-16 py-4 text-xl border border-black m-2 rounded-2xl border-2 transition-all duration-200  font-medium  ${selectedStems.includes(stem.name) ? " bg-black text-white ring-4 ring-black ring-offset-2" : "bg-white text-black"}`}
-            //Run this function on click
             onClick={() => handleStemSelection(stem.name)}
           >
             <span className="flex items-center justify-center">
@@ -86,18 +95,16 @@ const StemSelector = ({
           </button>
         ))}
       </div>
-      <div>
-        <button
-          className={`px-24 w-85 flex-shrink-0  py-4 text-xl m-2 rounded-2xl  transition-all duration-200  font-medium tacking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-gray-200  text-gray-600"}`}
-          disabled={selectedStems.length === 0}
-          onClick={splitStems}
-        >
-          {selectedStems.length > 0
-            ? `Process ${selectedStems.length} Stem${selectedStems.length > 1 ? "s" : ""}`
-            : "Select Stems"}
-        </button>
-      </div>
-    </div>
+      <button
+        className={`px-24 w-85 flex-shrink-0 py-4 text-xl rounded-2xl transition-all duration-200 font-medium tracking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-gray-200 text-gray-600"}`}
+        disabled={selectedStems.length === 0}
+        onClick={splitStems}
+      >
+        {selectedStems.length > 0
+          ? `Process ${selectedStems.length} Stem${selectedStems.length > 1 ? "s" : ""}`
+          : "Select Stems"}
+      </button>
+    </>
   );
 };
 

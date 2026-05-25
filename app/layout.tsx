@@ -29,9 +29,7 @@ export default function RootLayout({
         <Nav />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />
-          <main className="flex flex-1 flex-1 p-8 overflow-y-auto items-center">
-            {children}
-          </main>
+          <main className="flex flex-1 p-8 overflow-y-auto">{children}</main>
         </div>
       </body>
     </html>

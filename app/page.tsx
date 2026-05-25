@@ -8,7 +8,12 @@ import StemResults from "@/components/StemResults";
 
 export default function Home() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [selectedStems, setSelectedStems] = useState<string[]>([]);
+  const [selectedStems, setSelectedStems] = useState<string[]>([
+    "Vocals",
+    "Drums",
+    "Bass",
+    "Melody",
+  ]);
   const [isProcessing, setIsProcessing] = useState(false);
   // holds the stem URLs when done — its existence means "results are ready"
   const [stemResults, setStemResults] = useState<Record<
@@ -16,8 +21,14 @@ export default function Home() {
     string | null
   > | null>(null);
 
+  const reset = () => {
+    setAudioFile(null);
+    setSelectedStems(["Vocals", "Drums", "Bass", "Melody"]);
+    setStemResults(null);
+  };
+
   return (
-    <div className="w-full">
+    <div className="relative w-full flex flex-col items-center gap-12 pt-16">
       {isProcessing ? (
         <Loader audioFile={audioFile?.name || ""} />
       ) : stemResults ? (
@@ -28,6 +39,7 @@ export default function Home() {
             ),
           )}
           fileName={audioFile?.name || ""}
+          reset={reset}
         />
       ) : audioFile ? (
         <StemSelector
@@ -36,6 +48,7 @@ export default function Home() {
           setSelectedStems={setSelectedStems}
           setIsProcessing={setIsProcessing}
           setStemResults={setStemResults}
+          reset={reset}
         />
       ) : (
         <UploadZone setAudioFile={setAudioFile} />
