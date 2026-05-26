@@ -17,10 +17,10 @@ const AudioPlayer = ({ url }: { url: string }) => {
   };
 
   return (
-    <div className="flex items-center gap-4 w-full">
+    <div className="flex items-center gap-4 w-full border-2 border-neutral-200 rounded-2xl px-4 py-3">
       <button
         onClick={onPlayPause}
-        className="flex-shrink-0 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center"
+        className="flex-shrink-0 w-12 h-12 rounded-full bg-black text-white flex items-center justify-center"
       >
         {isPlaying ? (
           <Pause className="w-4 h-4 fill-white" />
@@ -31,13 +31,13 @@ const AudioPlayer = ({ url }: { url: string }) => {
 
       <div className="flex-1">
         <WavesurferPlayer
-          height={75}
-          waveColor="#000000"
-          progressColor="#cbcbcb"
+          height={80}
+          waveColor="#d4d4d4"
+          progressColor="#000000"
           url={url}
-          barWidth={4}
-          barGap={1}
-          barRadius={2}
+          barWidth={5}
+          barGap={2}
+          barRadius={3}
           onReady={onReady}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}

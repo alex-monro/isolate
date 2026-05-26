@@ -54,18 +54,22 @@ const Loader = ({ audioFile }: { audioFile: string }) => {
           />
         ))}
       </div>
-      <p className="text-5xl font-black tracking-tight">Splitting Your Track</p>
-      <p className="text-base text-gray-600">{audioFile}</p>
+      <p className="text-5xl font-black tracking-[-0.05em] text-neutral-900 text-center">
+        Splitting Your Track
+      </p>
+      <p className="text-xl text-neutral-600 text-center">{audioFile}</p>
       <div className="w-full max-w-md flex flex-col gap-2">
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-black rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="text-sm text-gray-500 text-right">{Math.round(progress)}%</p>
+        <p className="text-sm text-neutral-600 text-right">
+          {Math.round(progress)}%
+        </p>
       </div>
-      <p className="text-xl max-w-2xl text-center">
+      <p className="text-xl max-w-2xl text-neutral-700 text-center">
         This may take a few moments depending on the length of your track and
         the number of stems selected. Thanks for your patience!
       </p>

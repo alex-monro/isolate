@@ -17,8 +17,5 @@ export async function POST(request: Request) {
     { input: { audio: audioFile } },
   );
 
-  // peek at the raw thing Replicate gives me, forced into plain text
-  console.log("RAW OUTPUT:", JSON.stringify(output));
-
   return Response.json(output);
 }

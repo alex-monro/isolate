@@ -1,21 +1,17 @@
 "use client";
 
-import { Disc3 } from "lucide-react";
-
 const Nav = () => {
   return (
     <nav>
-      <div className="mx-auto px-8 py-6 flex justify-between border-b border-gray-200">
+      <div className="mx-auto px-8 py-4 flex justify-between border-b border-neutral-100">
         <button
-          onClick={() => { window.location.href = "/"; }}
-          className="flex items-center gap-3"
+          onClick={() => {
+            window.location.href = "/";
+          }}
+          className="flex items-center"
         >
-          <Disc3 className="w-10 h-10 text-black" strokeWidth={2.5} />
-          <span className="text-3xl font-extrabold tracking-[-0.96px]">
-            Stem.Split
-          </span>
+          <img src="/logo.svg" alt="isolate.fm" className="h-5 w-auto object-contain" style={{ mixBlendMode: "multiply" }} />
         </button>
-        <div className="space-x-4"></div>
       </div>
     </nav>
   );

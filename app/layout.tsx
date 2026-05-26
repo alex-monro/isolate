@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Stem.Split - AI Audio Stem Separation",
+  title: "isolate.fm - AI Audio Stem Separation",
   description: "Split your audio tracks into vocals, drums, bass, and melody",
 };
 
@@ -28,8 +28,10 @@ export default function RootLayout({
       >
         <Nav />
         <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex flex-1 p-8 overflow-y-auto">{children}</main>
+          <div className="hidden md:block">
+            <Sidebar />
+          </div>
+          <main className="flex flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
         </div>
       </body>
     </html>

@@ -18,16 +18,19 @@ const UploadZone = ({
   };
 
   return (
-    // This is the upload zone. I used a ref to make sure that when the user clicks on the div, it actually triggers the input properties
     <>
-      <h1 className="font-black text-5xl tracking-tight">Stem Splitter</h1>
-      <p className="text-xl max-w-2xl text-center">
-        Upload an audio track and get vocals, drums, bass, and melody separated.
+      <img
+        src="/heading-upload.svg"
+        alt="Stem.Split"
+        className="h-36 object-contain"
+        style={{ mixBlendMode: "multiply" }}
+      />
+      <p className="text-xl text-neutral-700 max-w-md text-center">
+        Upload an audio file and get vocals, drums, bass, and melody separated.
       </p>
-      <div className="mt-12 w-full">
+      <div className="w-full">
         <div
           onClick={handleUploadClick}
-          //over ride the default browser behavior
           onDragOver={(e) => {
             e.preventDefault();
             setIsDragging(true);
@@ -36,50 +39,59 @@ const UploadZone = ({
             e.preventDefault();
             setIsDragging(false);
           }}
-          //on Drop access the file
           onDrop={(e) => {
             e.preventDefault();
             setIsDragging(false);
             const file = e.dataTransfer.files?.[0];
-            if (file) {
-              setAudioFile(file);
-            }
+            if (file) setAudioFile(file);
           }}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") handleUploadClick();
           }}
-          className={` ${isDragging ? "scale-[1.05]" : ""} transition-transform cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-black w-full max-w-4xl mx-auto py-30 rounded-4xl focus:outline-none focus-visible:ring-4 focus-visible:ring-black`}
+          className={`group relative ${isDragging ? "scale-[1.02] bg-neutral-50" : ""} transition-all duration-200 cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-neutral-500 hover:border-neutral-700 hover:bg-neutral-50 w-full max-w-4xl mx-auto py-24 md:py-32 rounded-3xl focus:outline-none focus-visible:ring-4 focus-visible:ring-black`}
         >
+          {/* corner ticks */}
+          <span className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-neutral-400 group-hover:border-neutral-950 transition-colors rounded-tl-sm" />
+          <span className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-neutral-400 group-hover:border-neutral-950 transition-colors rounded-tr-sm" />
+          <span className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-neutral-400 group-hover:border-neutral-950 transition-colors rounded-bl-sm" />
+          <span className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-neutral-400 group-hover:border-neutral-950 transition-colors rounded-br-sm" />
+
           <input
             type="file"
             accept="audio/*"
             className="hidden"
             id="file-upload"
             ref={input}
-            //This Handles when someone actually clicks to add an audio file
             onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) {
-                setAudioFile(file);
-              }
+              if (file) setAudioFile(file);
             }}
           />
 
-          {isDragging ? (
-            <Download className="w-8 h-8 " />
-          ) : (
-            <Music className="w-8 h-8 " />
-          )}
-          <p className="mt-4 text-lg font-bold">
-            {isDragging
-              ? "Drop your audio file here!"
-              : "Click or drag an audio file here"}
+          <div
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors duration-200 ${isDragging ? "bg-neutral-950" : "bg-neutral-100 group-hover:bg-neutral-950"}`}
+          >
+            {isDragging ? (
+              <Download className="w-6 h-6 text-white" />
+            ) : (
+              <Music className="w-6 h-6 text-neutral-600 group-hover:text-white transition-colors duration-200" />
+            )}
+          </div>
+          <p className="mt-4 text-md font-medium text-neutral-700">
+            {isDragging ? (
+              "Drop your audio file here!"
+            ) : (
+              <>
+                <span className="md:hidden">Tap to add an audio file</span>
+                <span className="hidden md:inline">
+                  Click or drag an audio file here
+                </span>
+              </>
+            )}
           </p>
-          <p className="mt-4 text-md text-gray-700">
-            Supported formats: MP3, WAV, FLAC
-          </p>
+          <p className="mt-1 text-sm text-neutral-600">MP3, WAV, FLAC</p>
         </div>
       </div>
     </>

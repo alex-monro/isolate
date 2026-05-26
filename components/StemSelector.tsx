@@ -51,7 +51,6 @@ const StemSelector = ({
 
     const data = await response.json();
 
-    console.log(data);
     setStemResults(data);
     setIsProcessing(false);
   };
@@ -60,33 +59,35 @@ const StemSelector = ({
     <>
       <button
         onClick={reset}
-        className="absolute top-0 left-0 flex items-center gap-1 text-base font-medium text-gray-700 hover:text-black transition-colors"
+        className="fixed bottom-8 left-4 md:left-64 flex items-center gap-1 text-base font-medium text-neutral-700 hover:text-black transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Pick a different file
       </button>
-      <h1 className="font-black text-5xl tracking-tightest">Stem Splitter</h1>
+      <img
+        src="/heading-select.svg"
+        alt="Select your stems"
+        className="h-36 object-contain"
+        style={{ mixBlendMode: "multiply" }}
+      />
 
-      <div className="w-full max-w-6xl">
-        <div className="flex items-center gap-2 text-base font-semibold text-black mb-3">
-          <Music className="w-5 h-5" />
+      <div className="w-full max-w-5xl">
+        <div className="flex items-center gap-2 text-sm font-medium text-neutral-600 mb-3">
+          <Music className="w-4 h-4" />
           <span className="truncate">{audioFile.name}</span>
         </div>
         <AudioPlayer url={audioUrl} />
       </div>
-      <h2 className="font-bold  tracking-tight text-3xl tracking-tightest">
-        Select Stems to Extract
-      </h2>
-      <p className="text-xl tracking-tight ">
-        Choose which stems you want. Each selection will be processed and
-        available for download.
+
+      <p className="text-xl text-neutral-700 mx-auto text-center">
+        Choose which stems to extract and download.
       </p>
-      <div>
+      <div className="w-full max-w-sm mx-auto flex flex-col gap-2 px-4 md:px-0 md:flex-row md:flex-wrap md:justify-center md:max-w-none">
         {stems.map((stem) => (
           <button
             key={stem.name}
             aria-pressed={selectedStems.includes(stem.name)}
-            className={`px-16 py-4 text-xl border border-black m-2 rounded-2xl border-2 transition-all duration-200  font-medium  ${selectedStems.includes(stem.name) ? " bg-black text-white ring-4 ring-black ring-offset-2" : "bg-white text-black"}`}
+            className={`w-full md:w-auto px-16 py-4 text-xl rounded-2xl border-2 transition-all duration-200 font-medium ${selectedStems.includes(stem.name) ? "bg-black text-white border-black ring-4 ring-black ring-offset-2" : "bg-white text-neutral-700 border-neutral-300"}`}
             onClick={() => handleStemSelection(stem.name)}
           >
             <span className="flex items-center justify-center">
@@ -96,7 +97,7 @@ const StemSelector = ({
         ))}
       </div>
       <button
-        className={`px-24 w-85 flex-shrink-0 py-4 text-xl rounded-2xl transition-all duration-200 font-medium tracking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-gray-200 text-gray-600"}`}
+        className={`w-full max-w-sm mx-auto md:w-auto px-24 flex-shrink-0 py-4 text-xl rounded-2xl transition-all duration-200 font-medium tracking-tight ${selectedStems.length > 0 ? "text-white bg-black" : "bg-neutral-200 text-neutral-600"}`}
         disabled={selectedStems.length === 0}
         onClick={splitStems}
       >
