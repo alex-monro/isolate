@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import AudioPlayer from "@/components/AudioPlayer";
 import { useState, useMemo } from "react";
 import { Mic2, Drum, Speaker, Music, ArrowLeft } from "lucide-react";
@@ -53,10 +54,13 @@ const StemSelector = ({
         <ArrowLeft className="w-4 h-4" />
         Pick a different file
       </button>
-      <img
+      <Image
         src="/heading-select.svg"
         alt="Select your stems"
-        className="h-30 object-contain"
+        width={400}
+        height={100}
+        loading="lazy"
+        className="h-26 w-auto object-contain"
         style={{ mixBlendMode: "multiply" }}
       />
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import AudioPlayer from "./AudioPlayer";
 import { Mic2, Drum, Speaker, Music, Download, ArrowLeft } from "lucide-react";
 
@@ -59,10 +60,13 @@ const StemResults = ({
       </button>
     <div className="w-full flex flex-col items-center gap-12 fade-up">
 
-      <img
+      <Image
         src="/heading-ready.svg"
         alt="Your Stems are Ready"
-        className="h-20 object-contain"
+        width={400}
+        height={80}
+        loading="lazy"
+        className="h-20 w-auto object-contain"
         style={{ mixBlendMode: "multiply" }}
       />
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6">

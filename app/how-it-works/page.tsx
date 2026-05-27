@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function HowItWorksPage() {
   const steps = [
     {
@@ -21,7 +23,7 @@ export default function HowItWorksPage() {
         "Vocals, drums, bass, and melody",
         "Select any combination",
       ],
-      image: "/stem selection.png",
+      image: "/stem-selection.png",
       alt: "Select your stems",
     },
     {
@@ -45,7 +47,7 @@ export default function HowItWorksPage() {
         "High-quality audio output",
         "Download each stem individually",
       ],
-      image: "/download stems.png",
+      image: "/download-stems.png",
       alt: "Download your stems",
     },
   ];
@@ -53,10 +55,13 @@ export default function HowItWorksPage() {
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-24 py-16">
       <div className="flex flex-col items-center gap-8 text-center">
-        <img
+        <Image
           src="/logo.svg"
           alt="isolate"
-          className="h-8 object-contain"
+          width={100}
+          height={32}
+          priority
+          className="h-8 w-auto object-contain"
           style={{ mixBlendMode: "multiply" }}
         />
         <h1 className="text-5xl font-black tracking-[-0.05em]">how it works</h1>
@@ -104,9 +109,12 @@ export default function HowItWorksPage() {
               </ul>
             </div>
             <div className="flex-[1.2]">
-              <img
+              <Image
                 src={step.image}
                 alt={step.alt}
+                width={800}
+                height={500}
+                loading="lazy"
                 className="w-full rounded-2xl border border-neutral-200"
               />
             </div>

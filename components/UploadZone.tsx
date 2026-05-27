@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Download, Music } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -18,10 +19,13 @@ const UploadZone = ({
 
   return (
     <>
-      <img
+      <Image
         src="/heading-upload.svg"
-        alt="Stem.Split"
-        className="h-30 object-contain"
+        alt="Stem Splitter"
+        width={400}
+        height={120}
+        priority
+        className="h-30 w-auto object-contain"
         style={{ mixBlendMode: "multiply" }}
       />
       <p className="text-xl text-neutral-700 max-w-md text-center">
