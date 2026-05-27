@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Toast from "@/components/Toast";
 import { Download, Music } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 
 const UploadZone = ({
   onFileSelect,
@@ -10,15 +11,55 @@ const UploadZone = ({
   onFileSelect: (file: File) => void;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-
   const [isDragging, setIsDragging] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleUploadClick = () => {
     input.current?.click();
   };
 
+  const dismissToast = useCallback(() => setToastMessage(null), []);
+
+  // front end validation for ux issues
+  const handleFile = (file: File) => {
+    // Check file type
+    const allowedTypes = ["audio/mpeg", "audio/wav", "audio/flac"];
+    if (!allowedTypes.includes(file.type)) {
+      setToastMessage("Please upload an audio file — MP3, WAV, or FLAC.");
+      return;
+    }
+
+    // Check file size
+    if (file.size > 50 * 1024 * 1024) {
+      setToastMessage("File must be smaller than 50 MB.");
+      return;
+    }
+
+    // Frist create a new audio() object. after that use createObjectURL to set the src to the uploaded file. This will trigger the onloadedmetadata event, where we can check the duration of the audio. If it's longer than 7 minutes (420 seconds), show an error. If it loads successfully and is under 7 minutes, call onFileSelect with the file. Also handle the onerror event in case the file can't be read as audio for some reason.
+    const audio = new Audio();
+    audio.onloadedmetadata = () => {
+      URL.revokeObjectURL(audio.src);
+
+      if (audio.duration > 420) {
+        setToastMessage("Audio must be 7 minutes or less.");
+        return;
+      }
+
+      onFileSelect(file);
+    };
+
+    audio.onerror = () => {
+      URL.revokeObjectURL(audio.src);
+      setToastMessage("Could not read audio file. Please try another.");
+    };
+    audio.src = URL.createObjectURL(file);
+  };
+
   return (
     <>
+      {toastMessage && (
+        <Toast message={toastMessage} onDismiss={dismissToast} />
+      )}
       <Image
         src="/heading-upload.svg"
         alt="Stem Splitter"
@@ -45,7 +86,7 @@ const UploadZone = ({
           e.preventDefault();
           setIsDragging(false);
           const file = e.dataTransfer.files?.[0];
-          if (file) onFileSelect(file);
+          if (file) handleFile(file);
         }}
         role="button"
         tabIndex={0}
@@ -67,32 +108,34 @@ const UploadZone = ({
           ref={input}
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) onFileSelect(file);
+            if (file) handleFile(file);
           }}
         />
 
-        <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors duration-200 ${isDragging ? "bg-neutral-950" : "bg-neutral-100 group-hover:bg-neutral-950"}`}
-        >
-          {isDragging ? (
-            <Download className="w-6 h-6 text-white" />
-          ) : (
-            <Music className="w-6 h-6 text-neutral-600 group-hover:text-white transition-colors duration-200" />
-          )}
+        <div className="pointer-events-none flex flex-col items-center">
+          <div
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors duration-200 ${isDragging ? "bg-neutral-950" : "bg-neutral-100 group-hover:bg-neutral-950"}`}
+          >
+            {isDragging ? (
+              <Download className="w-6 h-6 text-white" />
+            ) : (
+              <Music className="w-6 h-6 text-neutral-600 group-hover:text-white transition-colors duration-200" />
+            )}
+          </div>
+          <p className="mt-4 text-md font-medium text-neutral-700">
+            {isDragging ? (
+              "Drop your audio file here!"
+            ) : (
+              <>
+                <span className="md:hidden">Tap to add an audio file</span>
+                <span className="hidden md:inline">
+                  Click or drag an audio file here
+                </span>
+              </>
+            )}
+          </p>
+          <p className="mt-1 text-sm text-neutral-600">MP3, WAV, FLAC</p>
         </div>
-        <p className="mt-4 text-md font-medium text-neutral-700">
-          {isDragging ? (
-            "Drop your audio file here!"
-          ) : (
-            <>
-              <span className="md:hidden">Tap to add an audio file</span>
-              <span className="hidden md:inline">
-                Click or drag an audio file here
-              </span>
-            </>
-          )}
-        </p>
-        <p className="mt-1 text-sm text-neutral-600">MP3, WAV, FLAC</p>
       </div>
     </>
   );
