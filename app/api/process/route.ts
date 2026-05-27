@@ -1,13 +1,15 @@
 import Replicate from "replicate";
 import { audioUploadSchema } from "@/lib/validation";
 
-if (!process.env.REPLICATE_API_TOKEN) {
-  throw new Error("REPLICATE_API_TOKEN is missing from environment variables");
-}
-
-const replicate = new Replicate({ useFileOutput: false });
-
 export async function POST(request: Request) {
+  if (!process.env.REPLICATE_API_TOKEN) {
+    throw new Error(
+      "REPLICATE_API_TOKEN is missing from environment variables",
+    );
+  }
+
+  const replicate = new Replicate({ useFileOutput: false });
+
   try {
     // Grab the form data from the request
     const formData = await request.formData();
