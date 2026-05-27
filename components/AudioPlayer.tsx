@@ -1,14 +1,15 @@
 "use client";
 
 import WavesurferPlayer from "@wavesurfer/react";
+import type WaveSurfer from "wavesurfer.js";
 import { useState } from "react";
 import { Play, Pause } from "lucide-react";
 
 const AudioPlayer = ({ url }: { url: string }) => {
-  const [wavesurfer, setWavesurfer] = useState(null);
+  const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const onReady = (ws) => {
+  const onReady = (ws: WaveSurfer) => {
     setWavesurfer(ws);
   };
 
