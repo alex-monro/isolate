@@ -5,7 +5,6 @@ import UploadZone from "@/components/UploadZone";
 import StemSelector from "@/components/StemSelector";
 import Loader from "@/components/Loader";
 import StemResults from "@/components/StemResults";
-
 export default function Home() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [selectedStems, setSelectedStems] = useState<string[]>([]);
@@ -22,8 +21,22 @@ export default function Home() {
     setStemResults(null);
   };
 
+  const handleFileSelect = (file: File) => setAudioFile(file);
+
+  const handleStemToggle = (stem: string) => {
+    setSelectedStems((prev) =>
+      prev.includes(stem) ? prev.filter((s) => s !== stem) : [...prev, stem],
+    );
+  };
+
+  const handleProcessingChange = (processing: boolean) =>
+    setIsProcessing(processing);
+
+  const handleStemResults = (results: Record<string, string | null>) =>
+    setStemResults(results);
+
   return (
-    <div className="relative w-full flex flex-col items-center gap-16 py-16">
+    <div className="w-full flex flex-col items-center gap-16 py-16">
       {isProcessing ? (
         <Loader audioFile={audioFile?.name || ""} />
       ) : stemResults ? (
@@ -40,13 +53,13 @@ export default function Home() {
         <StemSelector
           audioFile={audioFile}
           selectedStems={selectedStems}
-          setSelectedStems={setSelectedStems}
-          setIsProcessing={setIsProcessing}
-          setStemResults={setStemResults}
+          onStemToggle={handleStemToggle}
+          onProcessingChange={handleProcessingChange}
+          onStemResults={handleStemResults}
           reset={reset}
         />
       ) : (
-        <UploadZone setAudioFile={setAudioFile} />
+        <UploadZone onFileSelect={handleFileSelect} />
       )}
     </div>
   );

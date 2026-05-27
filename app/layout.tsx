@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,8 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "isolate.fm - AI Audio Stem Separation",
-  description: "Split your audio tracks into vocals, drums, bass, and melody",
+  title: "isolate - AI Audio Stem Separation",
+  description: "Split your audio into vocals, drums, bass, and melody",
 };
 
 export default function RootLayout({
@@ -28,11 +29,17 @@ export default function RootLayout({
       >
         <Nav />
         <div className="flex flex-1 overflow-hidden">
-          <div className="hidden md:block">
+          <div className="hidden md:flex h-full">
             <Sidebar />
           </div>
-          <main className="flex flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
+          <div className="flex flex-1 flex-col overflow-y-auto">
+            <main className="flex flex-1 p-4 md:p-8">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </div>
+
       </body>
     </html>
   );

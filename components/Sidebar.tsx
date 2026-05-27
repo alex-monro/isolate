@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [isActive, setIsActive] = useState("Stem Splitter");
+  const pathname = usePathname();
 
   const navItems = {
     "Stem Splitter": "/",
@@ -40,7 +40,7 @@ const Sidebar = () => {
               <li className="mb-2" key={label}>
                 <Link
                   href={href}
-                  className={`block py-2 px-4 rounded-lg transition-colors duration-200 whitespace-nowrap ${isActive === label ? "bg-black text-white" : "text-neutral-700 hover:bg-neutral-100 hover:text-black"}`}
+                  className={`block py-2 px-4 rounded-lg transition-colors duration-200 whitespace-nowrap ${pathname === href ? "bg-black text-white" : "text-neutral-700 hover:bg-neutral-100 hover:text-black"}`}
                 >
                   {label}
                 </Link>

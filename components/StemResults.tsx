@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import AudioPlayer from "./AudioPlayer";
 import { Mic2, Drum, Speaker, Music, Download, ArrowLeft } from "lucide-react";
 

@@ -55,7 +55,7 @@ const Loader = ({ audioFile }: { audioFile: string }) => {
         ))}
       </div>
       <p className="text-5xl font-black tracking-[-0.05em] text-neutral-900 text-center">
-        Splitting Your Track
+        Splitting Your Audio
       </p>
       <p className="text-xl text-neutral-600 text-center">{audioFile}</p>
       <div className="w-full max-w-md flex flex-col gap-2">
@@ -70,7 +70,7 @@ const Loader = ({ audioFile }: { audioFile: string }) => {
         </p>
       </div>
       <p className="text-xl max-w-2xl text-neutral-700 text-center">
-        This may take a few moments depending on the length of your track and
+        This may take a few moments depending on the length of your audio and
         the number of stems selected. Thanks for your patience!
       </p>
     </div>

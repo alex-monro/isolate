@@ -1,23 +1,22 @@
 "use client";
 
 import AudioPlayer from "@/components/AudioPlayer";
-import { useState, useMemo, SetStateAction, Dispatch } from "react";
+import { useState, useMemo } from "react";
 import { Mic2, Drum, Speaker, Music, ArrowLeft } from "lucide-react";
 
 const StemSelector = ({
   audioFile,
   selectedStems,
-  setSelectedStems,
-  setIsProcessing,
-  setStemResults,
+  onStemToggle,
+  onProcessingChange,
+  onStemResults,
   reset,
 }: {
   audioFile: File;
   selectedStems: string[];
-  // Typed as Dispatch<SetStateAction> to explicitly tell TypeScript we're passing down a setter — which can accept both a direct value and a callback function
-  setSelectedStems: Dispatch<SetStateAction<string[]>>;
-  setIsProcessing: (isProcessing: boolean) => void;
-  setStemResults: (stemResults: Record<string, string | null>) => void;
+  onStemToggle: (stem: string) => void;
+  onProcessingChange: (processing: boolean) => void;
+  onStemResults: (results: Record<string, string | null>) => void;
   reset: () => void;
 }) => {
   const audioUrl = useMemo(() => URL.createObjectURL(audioFile), [audioFile]);
@@ -29,18 +28,8 @@ const StemSelector = ({
     { name: "Melody", icon: Music },
   ];
 
-  // if selected stem is included in the stem array, filter the array to remove it and update it.
-  const handleStemSelection = (stem: string) => {
-    if (selectedStems.includes(stem)) {
-      setSelectedStems((prev) => prev.filter((s) => s !== stem));
-      //if not, add it onto the existing array of selected stems
-    } else {
-      setSelectedStems((prev) => [...prev, stem]);
-    }
-  };
-
   const splitStems = async () => {
-    setIsProcessing(true);
+    onProcessingChange(true);
     const formData = new FormData();
     formData.append("audio", audioFile);
 
@@ -51,8 +40,8 @@ const StemSelector = ({
 
     const data = await response.json();
 
-    setStemResults(data);
-    setIsProcessing(false);
+    onStemResults(data);
+    onProcessingChange(false);
   };
 
   return (
@@ -67,7 +56,7 @@ const StemSelector = ({
       <img
         src="/heading-select.svg"
         alt="Select your stems"
-        className="h-36 object-contain"
+        className="h-30 object-contain"
         style={{ mixBlendMode: "multiply" }}
       />
 
@@ -88,7 +77,7 @@ const StemSelector = ({
             key={stem.name}
             aria-pressed={selectedStems.includes(stem.name)}
             className={`w-full md:w-auto px-16 py-4 text-xl rounded-2xl border-2 transition-all duration-200 font-medium ${selectedStems.includes(stem.name) ? "bg-black text-white border-black ring-4 ring-black ring-offset-2" : "bg-white text-neutral-700 border-neutral-300"}`}
-            onClick={() => handleStemSelection(stem.name)}
+            onClick={() => onStemToggle(stem.name)}
           >
             <span className="flex items-center justify-center">
               {stem.name} <stem.icon className="w-5 h-5 inline ml-2" />
