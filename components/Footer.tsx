@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="flex justify-end items-center px-8 py-4 border-t border-neutral-200">
       <a
-        href="https://github.com/alex-monro/isolate"
+        href="https://github.com/alex-monro/isolate."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="View source on GitHub"
