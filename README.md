@@ -12,7 +12,7 @@ Drop in an MP3, WAV, or FLAC file (up to 50 MB, 7 minutes). Pick which stems you
 
 ## Why I built it
 
-As a music producer, I wanted a simple tool to split stems. No upsell, no sign-up wall, no paywall. Just drag, drop, wait a few minutes, boom.
+As a music producer, I wanted a simple tool to split stems. No upsell, no sign-up wall, no paywall. Just drag, drop, wait a few minutes, boom. I wanted a personal, highest quality stem splitter for myself and friends that works better than the ones built into DAWs.
 
 ## Tech stack
 
