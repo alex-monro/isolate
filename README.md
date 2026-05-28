@@ -4,7 +4,7 @@ AI-powered audio stem separator. Upload any track and split it into vocals, drum
 
 **Live demo:** [tryisolate.xyz](https://tryisolate.xyz/)
 
-![isolate banner](public/logo.svg)
+![isolate banner](public/stem-selection.png)
 
 ## What it does
 
