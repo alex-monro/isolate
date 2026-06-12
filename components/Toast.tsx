@@ -9,7 +9,7 @@ const Toast = ({ message, onDismiss }: { message: string; onDismiss: () => void 
   }, [onDismiss]);
 
   return (
-    <div className="fixed bottom-8 left-0 md:left-56 right-0 flex justify-center pointer-events-none z-50">
+    <div role="alert" aria-live="assertive" className="fixed bottom-8 left-0 md:left-56 right-0 flex justify-center pointer-events-none z-50">
       <p className="pointer-events-auto bg-black text-white text-sm font-medium px-5 py-3 rounded-2xl animate-fade-up">
         {message}
       </p>

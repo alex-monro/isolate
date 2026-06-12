@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import UploadZone from "@/components/UploadZone";
 import StemSelector from "@/components/StemSelector";
 import Loader from "@/components/Loader";
@@ -15,10 +15,22 @@ export default function Home() {
     string | null
   > | null>(null);
 
+  // holds the abort controller so we can cancel the fetch from anywhere
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // cancel the fetch if the user navigates away
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
   const reset = () => {
+    abortControllerRef.current?.abort();
     setAudioFile(null);
     setSelectedStems([]);
     setStemResults(null);
+    setIsProcessing(false);
   };
 
   const handleFileSelect = (file: File) => setAudioFile(file);
@@ -35,8 +47,13 @@ export default function Home() {
   const handleStemResults = (results: Record<string, string | null>) =>
     setStemResults(results);
 
+  const handleAbortController = (controller: AbortController) => {
+    abortControllerRef.current = controller;
+  };
+
   return (
     <div className="w-full flex flex-col items-center gap-16 py-16">
+      <h1 className="sr-only">Isolate - Audio Stem Splitter</h1>
       {isProcessing ? (
         <Loader audioFile={audioFile?.name || ""} />
       ) : stemResults ? (
@@ -56,6 +73,7 @@ export default function Home() {
           onStemToggle={handleStemToggle}
           onProcessingChange={handleProcessingChange}
           onStemResults={handleStemResults}
+          onAbortController={handleAbortController}
           reset={reset}
         />
       ) : (

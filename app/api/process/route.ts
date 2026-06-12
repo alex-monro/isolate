@@ -1,7 +1,35 @@
 import Replicate from "replicate";
 import { audioUploadSchema } from "@/lib/validation";
 
+const LIMIT = 6;
+const WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+const requests = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = requests.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    requests.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+
+  if (entry.count >= LIMIT) return true;
+
+  entry.count++;
+  return false;
+}
+
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  if (isRateLimited(ip)) {
+    return Response.json(
+      { error: "Too many requests. You can process 6 files per hour." },
+      { status: 429 },
+    );
+  }
+
   if (!process.env.REPLICATE_API_TOKEN) {
     throw new Error(
       "REPLICATE_API_TOKEN is missing from environment variables",

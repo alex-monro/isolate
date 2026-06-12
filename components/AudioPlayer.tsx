@@ -21,6 +21,7 @@ const AudioPlayer = ({ url }: { url: string }) => {
     <div className="flex items-center gap-4 w-full border-2 border-neutral-200 rounded-2xl px-4 py-3">
       <button
         onClick={onPlayPause}
+        aria-label={isPlaying ? "Pause" : "Play"}
         className="flex-shrink-0 w-12 h-12 rounded-full bg-black text-white flex items-center justify-center"
       >
         {isPlaying ? (

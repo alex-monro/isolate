@@ -42,7 +42,7 @@ const Loader = ({ audioFile }: { audioFile: string }) => {
     <div
       className="w-full min-h-full flex flex-col items-center justify-center gap-12"
       role="status"
-      aria-label="Loading"
+      aria-label="Processing audio, please wait"
     >
       <div className="flex gap-2">
         {Array.from({ length: barCount }).map((_, i) => (

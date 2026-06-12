@@ -11,6 +11,7 @@ const StemSelector = ({
   onStemToggle,
   onProcessingChange,
   onStemResults,
+  onAbortController,
   reset,
 }: {
   audioFile: File;
@@ -18,6 +19,7 @@ const StemSelector = ({
   onStemToggle: (stem: string) => void;
   onProcessingChange: (processing: boolean) => void;
   onStemResults: (results: Record<string, string | null>) => void;
+  onAbortController: (controller: AbortController) => void;
   reset: () => void;
 }) => {
   const audioUrl = useMemo(() => URL.createObjectURL(audioFile), [audioFile]);
@@ -30,19 +32,26 @@ const StemSelector = ({
   ];
 
   const splitStems = async () => {
+    const controller = new AbortController();
+    onAbortController(controller);
     onProcessingChange(true);
     const formData = new FormData();
     formData.append("audio", audioFile);
-
-    const response = await fetch("/api/process", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    onStemResults(data);
-    onProcessingChange(false);
+    try {
+      const response = await fetch("/api/process", {
+        method: "POST",
+        body: formData,
+        signal: controller.signal,
+      });
+      const data = await response.json();
+      onStemResults(data);
+    } catch (err) {
+      if ((err as Error).name !== "AbortError") {
+        console.error("Fetch failed:", err);
+      }
+    } finally {
+      onProcessingChange(false);
+    }
   };
 
   return (

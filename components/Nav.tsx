@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Nav = () => {
   return (
-    <nav>
+    <nav aria-label="Main navigation">
       <div className="mx-auto px-8 py-4 flex justify-between border-b border-neutral-100">
         <button className="flex items-center" onClick={() => { window.location.href = "/"; }}>
           <Image

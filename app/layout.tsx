@@ -33,7 +33,7 @@ export default function RootLayout({
             <Sidebar />
           </div>
           <div className="flex flex-1 flex-col overflow-y-auto">
-            <main className="flex flex-1 p-4 md:p-8">
+            <main aria-label="Main content" className="flex flex-1 p-4 md:p-8">
               {children}
             </main>
             <Footer />
