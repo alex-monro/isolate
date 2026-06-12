@@ -31,6 +31,8 @@ As a music producer, I wanted a simple tool to split stems. No upsell, no sign-u
 - Custom toast notifications for error messages
 - Audio preview player before processing
 - Selective stem extraction (pick only what you need)
+- Rate limited to 6 requests per hour per IP to protect API budget
+- Requests automatically cancelled if you navigate away
 - Responsive design that works on mobile and desktop
 
 ## What I learned
@@ -79,7 +81,6 @@ lib/
 
 ## What's next
 
-- Rate limiting to protect the API budget
 - User accounts and history of past splits
 - Longer file support with background job processing
 - Waveform visualization during playback
