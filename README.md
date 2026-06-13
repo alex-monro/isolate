@@ -1,6 +1,6 @@
 # isolate
 
-AI-powered audio stem separator. Upload any track and split it into vocals, drums, bass, and melody as separate downloadable files.
+The simplest stem splitter on the internet. Upload a track, pick your stems (vocals, drums, bass, melody), download. That's the whole app.
 
 **Live demo:** [tryisolate.xyz](https://tryisolate.xyz/)
 
@@ -12,11 +12,11 @@ Drop in an MP3, WAV, or FLAC file (up to 50 MB, 7 minutes). Pick which stems you
 
 ## Why I built it
 
-As a music producer, I wanted a simple tool to split stems. No upsell, no sign-up wall, no paywall. Just drag, drop, wait a few minutes, boom. I wanted a personal, highest quality stem splitter for myself and friends that works better than the ones built into DAWs.
+As a music producer, I got tired of stem splitters that make you work for it: ads everywhere, sign-up walls, settings you shouldn't need to understand. So I built the easiest, most beginner-friendly stem splitter out there. No upsell, no sign-up wall, no paywall, no bloat. If you can drag a file, you can use isolate. One job, done at the highest quality.
 
 ## Tech stack
 
-- **Next.js 15** with the App Router and Route Handlers
+- **Next.js 16** with the App Router and Route Handlers
 - **TypeScript** for type safety across the stack
 - **Tailwind CSS** for styling
 - **Zod** for runtime validation on the server
@@ -31,7 +31,7 @@ As a music producer, I wanted a simple tool to split stems. No upsell, no sign-u
 - Custom toast notifications for error messages
 - Audio preview player before processing
 - Selective stem extraction (pick only what you need)
-- Rate limited to 6 requests per hour per IP to protect API budget
+- IP-based rate limiting to protect API budget
 - Requests automatically cancelled if you navigate away
 - Responsive design that works on mobile and desktop
 
@@ -48,8 +48,8 @@ This project taught me the difference between "it works" and "it's production-re
 ## Running locally
 
 ```bash
-git clone https://github.com/alex-monro/isolate..git
-cd isolate.
+git clone https://github.com/alex-monro/isolate.git
+cd isolate
 npm install
 ```
 
@@ -81,6 +81,9 @@ lib/
 
 ## What's next
 
-- User accounts and history of past splits
-- Longer file support with background job processing
+Splitting stays free and anonymous. Accounts will only ever exist so you can keep your stems.
+
+- User accounts and a persistent library of past splits
+- Background job processing for longer files
+- Semantic search: find any stem in your library by describing the sound
 - Waveform visualization during playback
