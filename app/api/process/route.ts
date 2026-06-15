@@ -1,32 +1,30 @@
 import Replicate from "replicate";
 import { audioUploadSchema } from "@/lib/validation";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-const LIMIT = 6;
-const WINDOW_MS = 60 * 60 * 1000; // 1 hour
-
-const requests = new Map<string, { count: number; resetAt: number }>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = requests.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    requests.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return false;
-  }
-
-  if (entry.count >= LIMIT) return true;
-
-  entry.count++;
-  return false;
-}
+// 6 requests per hour per IP, counted in Redis so the limit survives across
+// Vercel's serverless invocations (an in-memory Map would reset and not work).
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(6, "1 h"),
+  prefix: "ratelimit:process",
+});
 
 export async function POST(request: Request) {
-  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
-  if (isRateLimited(ip)) {
+  // x-forwarded-for can be a comma-separated list; the first entry is the client.
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+
+  const { success, reset } = await ratelimit.limit(ip);
+  if (!success) {
+    const retryAfterSeconds = Math.max(
+      0,
+      Math.ceil((reset - Date.now()) / 1000),
+    );
     return Response.json(
       { error: "Too many requests. You can process 6 files per hour." },
-      { status: 429 },
+      { status: 429, headers: { "Retry-After": retryAfterSeconds.toString() } },
     );
   }
 
